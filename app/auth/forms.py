@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, TextAreaField, FileField
 from wtforms.validators import DataRequired, Email, EqualTo, Length
+from flask_wtf.file import FileAllowed
+
 
 
 class RegisterForm(FlaskForm): # inherit from FlaskForm
@@ -25,10 +27,13 @@ class PasswordResetRequestForm(FlaskForm):
     submit = SubmitField('Request Password Reset')
 
 class ResetPasswordForm(FlaskForm):
-    password = PasswordField('New Password', validators=[
-        DataRequired(),
-        Length(min=6),
-        EqualTo('confirm_password', message='Passwords must match.')
-    ])
+    password = PasswordField('New Password', validators=[DataRequired(), Length(min=6), EqualTo('confirm_password', message='Passwords must match.')])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired()])
     submit = SubmitField('Reset Password')
+
+class UpdatedProfileForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=25)])
+    bio = TextAreaField('Bio', validators=[Length(max=500)])
+    picture = FileField('Profile Picture', validators=[FileAllowed('jpg', 'jpeg', 'png')])
+    sumbit = SubmitField('Update Profile')
+    
