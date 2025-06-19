@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Edit Room - {{ room.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-warning text-dark">
+            <h4 class="mb-0">Edit Study Room</h4>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Room Name</label>
+                    <input type="text" name="name" id="name" value="{{ room.name }}" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea name="description" id="description" class="form-control" rows="4" required>{{ room.description }}</textarea>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('studyroom.room_detail', room_id=room.id) }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">Update Room</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
