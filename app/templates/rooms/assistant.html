@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Study Assistant</h2>
+
+    <form id="assistant-form" method="POST">
+        <div class="mb-3">
+            <label for="message" class="form-label">Ask a question:</label>
+            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Ask</button>
+    </form>
+
+    <div id="loading" class="mt-3 text-muted" style="display: none;">
+        <em>Assistant is thinking...</em>
+    </div>
+
+    {% if response %}
+    <div class="card mt-4">
+        <div class="card-header">
+            <strong>Assistant:</strong>
+        </div>
+        <div class="card-body">
+            <p>{{ response }}</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    document.getElementById('assistant-form').addEventListener('submit', function () {
+        document.getElementById('loading').style.display = 'block';
+    });
+</script>
+{% endblock %}

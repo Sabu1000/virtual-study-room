@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}{{ room.name }} - Details{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+            <h4 class="mb-0">{{ room.name }}</h4>
+        </div>
+        <div class="card-body">
+            <p class="mb-2"><strong>Description:</strong> {{ room.description or "No description provided." }}</p>
+            <p><strong>Created by:</strong> {{ room.host.username }}</p>
+            <p><strong>Created at:</strong> {{ room.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+
+            <div class="mt-4">
+                <a href="{{ url_for('studyroom.room_list') }}" class="btn btn-secondary">← Back to All Rooms</a>
+                <a href="{{ url_for('studyroom.chat', room_id=room.id) }}" class="btn btn-primary ms-2">Join Chat</a>
+
+                {% if room.host_id == current_user.id %}
+                    <a href="{{ url_for('studyroom.edit_room', room_id=room.id) }}" class="btn btn-warning ms-2">Edit</a>
+
+                    <form action="{{ url_for('studyroom.delete_room', room_id=room.id) }}" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-danger ms-2" onclick="return confirm('Are you sure you want to delete this room?');">Delete</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

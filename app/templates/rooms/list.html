@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}All Study Rooms{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">All Study Rooms</h2>
+        <a href="{{ url_for('studyroom.create_room') }}" class="btn btn-success">+ Create New Room</a>
+    </div>
+
+    {% if rooms %}
+        <div class="list-group">
+            {% for room in rooms %}
+                <a href="{{ url_for('studyroom.room_detail', room_id=room.id) }}" class="list-group-item list-group-item-action">
+                    <div class="d-flex justify-content-between">
+                        <h5 class="mb-1">{{ room.name }}</h5>
+                        <small>Created by {{ room.host.username }}</small>
+                    </div>
+                    <p class="mb-1 text-muted">{{ room.description[:100] }}{% if room.description|length > 100 %}...{% endif %}</p>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">No study rooms available. Be the first to create one!</p>
+    {% endif %}
+</div>
+{% endblock %}
