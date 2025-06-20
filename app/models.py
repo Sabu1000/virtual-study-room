@@ -12,12 +12,6 @@ class User(db.Model, UserMixin):
     # new profile 
     bio = db.Column(db.Text, nullable=True) 
     image_file = db.Column(db.String(120), default="default.jpg")
-    
-    study_rooms = db.relationship('StudyRoom', backref='host', lazy=True)
-    messages = db.relationship('Message', backref='user', lazy=True)
-
-
-    
 
 class StudyRoom(db.Model):
     id = db.Column(db.Integer, primary_key=True) # each room has a uniuqe id
@@ -36,7 +30,7 @@ class Message(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) # foreign key means that the column must match the user.id column in user table
     content = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    user = db.relationship('User', backref='messages')
+    user = db.relationship('User', backref=db.backref('messages', lazy=True))
     
 
 

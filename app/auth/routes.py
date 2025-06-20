@@ -1,15 +1,17 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user
 from app.models import User
 from app.extensions import db
 from . import auth_bp
-from .forms import RegisterForm, LoginForm, PasswordResetRequestForm, ForgotPasswordForm, ResetPasswordForm
+from .forms import RegisterForm, LoginForm, PasswordResetRequestForm, ForgotPasswordForm, ResetPasswordForm, UpdatedProfileForm
 from flask_login import current_user  
 from flask_mail import Message
 from app.extensions import mail
 from app.auth.email_utils import send_reset_email
-from app.utils.token import verify_reset_token
+from app.utils.token import verify_reset_token, generate_reset_token
+from werkzeug.utils import secure_filename
+import os
 
 
 @auth_bp.route('/register', methods=['GET', 'POST']) # get shows the form. post processes the submitted form data
@@ -71,7 +73,7 @@ def forgot_password():
 
 @auth_bp.route('/reset_password', methods=['GET', 'POST'])
 def reset_request():
-    form = RequestResetForm()
+    form = PasswordResetRequestForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
@@ -104,3 +106,37 @@ def reset_token(token):
         return redirect(url_for('auth.login'))
 
     return render_template('auth/reset_password.html', form=form)
+
+@auth_bp.route("/profile", methods=["GET", "POST"])
+@login_required
+def profile():
+    form = UpdatedProfileForm()
+
+    if form.validate_on_submit():
+        current_user.username = form.username.data
+        current_user.bio = form.bio.data
+
+        if form.picture.data:
+            picture_file = save_picture(form.picture.data)
+            current_user.image_file = picture_file
+
+        db.session.commit()
+        flash("Your profile has been updated!", "success")
+        return redirect(url_for("auth.profile"))
+
+    elif request.method == "GET":
+        form.username.data = current_user.username
+        form.bio.data = current_user.bio
+    image_url = url_for('static', filename="profile_pics/" + current_user.image_file)
+    return render_template("profile.html", title="Profile", form=form, image_url=image_url, user=current_user)
+
+def save_picture(form_picture):
+    filename = secure_filename(form_picture.filename)
+    picture_path = os.path.join(current_app.root_path, 'static/profile_pics', filename)
+    form_picture.save(picture_path)
+    return filename
+        
+
+
+
+
