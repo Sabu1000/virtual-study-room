@@ -65,9 +65,9 @@
       {% if current_user.is_authenticated %}
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
-          <span class="navbar-text">
+          <a href="{{ url_for('auth.profile') }}" class="nav-link">
             👤 Logged in as <strong>{{ current_user.username }}</strong>
-          </span>
+        </a>
         </li>
       </ul>
       {% endif %}
