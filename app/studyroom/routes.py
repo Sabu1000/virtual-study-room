@@ -20,7 +20,7 @@ def room_list():
 @login_required
 def create_room():
     if request.method == 'POST':
-        name = request.form['name']
+        name = request.form['name'] # get the value the user enters in the name field and store in name
         description = request.form['description']
         new_room = StudyRoom(name=name, description=description, host_id=current_user.id)
         db.session.add(new_room)

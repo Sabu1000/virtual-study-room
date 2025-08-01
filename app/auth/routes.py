@@ -17,32 +17,32 @@ import os
 @auth_bp.route('/register', methods=['GET', 'POST']) # get shows the form. post processes the submitted form data
 def register():
     form = RegisterForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit(): # check if the form was submitted (POST)
         existing_user = User.query.filter_by(email=form.email.data).first() # check if a user with the same email already exists in the database
         if existing_user:
             flash("An account with this email already exists.", "danger")
             return redirect(url_for('auth.register'))
 
         hashed_password = generate_password_hash(form.password.data)
-        new_user = User(
+        new_user = User( # create a new user by using the User class
             username=form.username.data,
             email=form.email.data,
             password_hash=hashed_password
         )
 
-        db.session.add(new_user)
+        db.session.add(new_user) # add the new user
         db.session.commit() # save the change
         login_user(new_user) # built in function to store user ID in session
 
         flash("Registration successful! You are now logged in.", "success")
         return redirect(url_for('main.home'))
-    return render_template('register.html', form=form)
+    return render_template('register.html', form=form) # if GET method, just render the template
 
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm() 
-    if form.validate_on_submit():
+    if form.validate_on_submit(): # (POST METHOD) can also be written as request.method == 'POST'
         user = User.query.filter_by(email=form.email.data).first()
         if user and check_password_hash(user.password_hash, form.password.data):
             login_user(user)

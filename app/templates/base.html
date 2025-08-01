@@ -61,7 +61,7 @@
         {% endif %}
       </ul>
 
-      <!-- Right-aligned user info -->
+     
       {% if current_user.is_authenticated %}
       <ul class="navbar-nav ms-auto">
         <li class="nav-item">
@@ -75,7 +75,6 @@
   </div>
 </nav>
 
-<!-- Page Content -->
 <div class="container">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
