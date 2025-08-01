@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 # this class is turned into an actual database table with shell
-class User(db.Model, UserMixin):
+class User(db.Model, UserMixin): # UserMixin allows methods for user
     id = db.Column(db.Integer, primary_key=True) # primary_key is the identifier for the table. every id column will automatically become unqiue for every user
     username = db.Column(db.String(25), nullable=False, unique=True) # all field must have value and must be unique. can have 25 char max
     email = db.Column(db.String(120), nullable=False, unique=True)

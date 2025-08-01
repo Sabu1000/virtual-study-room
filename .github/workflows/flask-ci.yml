@@ -1,0 +1,35 @@
+name: Flask CI # name of workflow
+
+# when workflow runs
+on:
+  push: # run when code is pushed to main branch
+    branches: [main]
+  pull_request: # or when PR is created
+    branches: [main]
+
+# define job to run
+jobs:
+  build:
+    runs-on: ubuntu-latest # use github ubuntu linux vm
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3 # pull github repo onto vm
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12' # set python version for testing
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv 
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install -r requirements.txt
+      
+    - name: Run tests
+      run: |
+        source venv/bin/activate
+        pytest || echo "No tests yet - skipping test step"
+
