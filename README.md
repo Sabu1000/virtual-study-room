@@ -1,5 +1,3 @@
-# Virtual Study Room
-
 ## Project Overview
 The Virtual Study Room is a web application designed to facilitate collaborative learning. It allows users to create and join virtual study rooms, chat in real-time, and manage their profiles. This project is built using Flask, a lightweight Python web framework, and includes features like user authentication, real-time chat, and study room management.
 

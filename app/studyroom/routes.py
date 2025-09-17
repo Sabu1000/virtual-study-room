@@ -4,7 +4,6 @@ from . import studyroom_bp
 from app.models import StudyRoom, Message
 from app.extensions import db
 import os
-import openai
 from openai import OpenAI
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
